@@ -1,0 +1,5 @@
+pandas
+keplergl
+plotly
+streamlit
+matplotlib

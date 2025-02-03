@@ -1,0 +1,6 @@
+pandas
+keplergl
+plotly
+streamlit
+matplotlib
+streamlit

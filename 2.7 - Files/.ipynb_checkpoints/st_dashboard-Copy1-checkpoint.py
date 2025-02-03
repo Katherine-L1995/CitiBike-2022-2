@@ -3,34 +3,30 @@ import pandas as pd  # Import pandas
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-# Create a copy with fewer columns
-df_1 = df.drop(columns=['member_casual', 'season', 'start_lat', 'value','month'])
 
-# Set the random seed for reproducibility
-np.random.seed(32)
+page = st.sidebar.selectbox('Select an aspect of the analysis',
+   ["Intro page",  "Weather component and bike usage",
+  "Most popular stations",
+     "Interactive map with aggregated bike trips", "Recommendations"])
 
-# Create a mask to randomly select 8% of the data
-mask = np.random.rand(len(df_1)) > 0.92
+####################### Import data #########################################
 
-# Select the subset of data
-small = df_1[mask]
-
-# Print the shape of the subset
-print(small.shape)
-
-# Save the reduced dataset to a CSV file
-small.to_csv('reduced_data_to_plot_11.csv', index=False)
+df = pd.read_csv('C:/Users/Kathe/NYC_CitiBike2022/CitibikeNYC/3.3_Include_Trips.csv', index_col=0)
 
 
+####################### DEFINE THE PAGES ##########################
 
 
-# Define the sidebar navigation
-page = st.sidebar.selectbox(
-    "Select a Page",
-    ["Intro Page", "Weather Analysis", "Most Frequented CitiBike Stations", "Interactive Map", "Recommendations"]
-)
+### Intro page
+
+ if page == "Intro page":
+      st.makrdown("#### This dashboard aims at providing helpful insights on the expansion problems Divvy Bikes currently face.")
+ st.markdown("Right now, Divvy bikes run into a situation where customers complain about bikes not being available at certain times. This analysis will look at the potential reasons behind this. The dashboard is separated into 4 sections:")
 
 
+
+myImage = Image.open("Divvy_Bikes.jpg")
+st.image(myImage)
 
 
 
@@ -39,15 +35,44 @@ st.title("NYC-CitiBike 2022")
 st.markdown("The Dashboard visualizes the Citibike Trips Taken in NYC during the 2022 year")
 
 
-####################### Import data #########################################
-
-df = pd.read_csv('C:/Users/Kathe/NYC_CitiBike2022/CitibikeNYC/3.3_Include_Trips.csv', index_col=0)
 
 # ########################### DEFINE THE CHARTS ############################
 
-## Bar chart 
+############################ Memebers Vs. Casual ############################ 
 
-### Citi Bike Stations in NYC by Popularity ###
+member_casual_counts = df['member_casual'].value_counts()
+
+fig = go.Figure(data=[go.Pie(
+    labels=member_casual_counts.index,
+    values=member_casual_counts.values,
+    hole=0.3,  # Add hole to make it a donut chart
+    marker=dict(colors=['lightblue', 'salmon'])
+)])
+
+fig.update_layout(
+    title='Member vs. Casual Riders',
+    template='plotly_dark'
+)
+
+
+# ########################### Rideable Type Count ############################
+rideable_type_counts = df['rideable_type'].value_counts()
+
+fig = go.Figure(data=[go.Bar(
+    x=rideable_type_counts.index,
+    y=rideable_type_counts.values,
+    marker=dict(color='royalblue')
+)])
+
+fig.update_layout(
+    title='Distribution of Bike Types',
+    xaxis_title='Rideable Type',
+    yaxis_title='Count',
+    template='plotly_dark'
+)
+
+
+############### Citi Bike Stations in NYC by Popularity ########################
 
 df['value'] = 1
 df_groupby_bar = df.groupby('start_station_name', as_index=False).agg({'value': 'sum'})
@@ -65,7 +90,7 @@ fig.update_layout(
 )
 st.plotly_chart(fig, use_container_width=True)
 
-### Citi Bike Trips Daily ###
+################ Citi Bike Trips Daily ###########################
 fig = make_subplots(specs=[[{"secondary_y": True}]])
 fig.add_trace(
     go.Scatter(x=df['date'], y=df['trips_per_day'], name='Daily bike rides',
@@ -79,8 +104,23 @@ fig.add_trace(
     secondary_y=True
 )
 
-### Citi Bike Trips Map ###
-path_to_html = "C:/Users/Kathe/Downloads/Stations_3.5_kepler.gl/Stations_3.5_kepler.gl.html"
+
+########################## Heatmap of Trip Counts by hour and Day of the Week #################################
+
+plt.figure(figsize=(14, 7))  # Adjust figure size
+sns.heatmap(heatmap_data, cmap="YlGnBu", annot=False)  # Remove annotations
+
+plt.title("Heatmap of Trip Counts by Hour and Day of the Week", fontsize=16)
+plt.xlabel("Hour of the Day", fontsize=14)
+plt.ylabel("Day of the Week", fontsize=14)
+plt.xticks(rotation=0, fontsize=12)
+plt.yticks(fontsize=12)
+
+plt.show()
+
+
+######################################### Citi Bike Trips Map ############################################################
+path_to_html = "C:\Users\Kathe\CitiBike-2022-2\2.6 Files - Copy\2.6 Files\heatmap.html"
 
 # Read file and keep in variable 
 with open(path_to_html, 'r') as f:
@@ -91,7 +131,26 @@ st.header("Aggregated Bike Trips in NYC")
 # Fixing typo in 'components' and passing HTML data to Streamlit component
 st.components.v1.html(html_data, height=1000)
 
-##### Weather Line Chart ######
+######################################### Citi Bike by season ############################################################
+trips_by_season = df.groupby('season')['trips_per_day'].sum()
+
+fig = go.Figure(data=[go.Bar(
+    x=trips_by_season.index,
+    y=trips_by_season.values,
+    marker=dict(color='indianred')
+)])
+
+fig.update_layout(
+    title='Trips by Season',
+    xaxis_title='Season',
+    yaxis_title='Trips Per Day',
+    template='plotly_dark'
+)
+
+
+
+
+############################# Weather Line Chart ######################################################
 
 fig = make_subplots(specs = [[{"secondary_y": True}]])
 
