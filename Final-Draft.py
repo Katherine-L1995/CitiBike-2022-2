@@ -101,6 +101,24 @@ elif page == "Popular Stations":
     # Display the image in Streamlit
     st.image(image, caption="CitiBike Sheet 2", use_column_width=True)
 
+    ### **Citi Bike Trips Daily**
+    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+    df['month'] = df['date'].dt.month
+    df['month'] = df['month'].astype('int')
+    df['season'] = [
+    "winter" if (month == 12 or month in [1, 2, 3, 4])
+    else "spring" if month in [5]
+    else "summer" if month in [6, 7, 8, 9]
+    else "fall"
+    for month in df['month']
+]
+    df['value'] = 1
+    df_groupby_bar = df.groupby('start_station_name', as_index=False).agg({'value': 'sum'})
+    top_20 = df_groupby_bar.nlargest(20, 'value')
+    fig = go.Figure(go.Bar(x = top_20['start_station_name'], y = top_20['value'], marker = {'color': top_20['value'],'colorscale': 'Blues'}))
+    st.plotly_chart(fig, use_container_width=True)
+
+
 ### Monthly Usage
 elif page == "Monthly Usage":
     st.markdown("### Monthly CitiBike Usage")
@@ -118,23 +136,6 @@ elif page == "Monthly Usage":
     )
     fig4.update_layout(title='Bike Trips by Season')
     st.plotly_chart(fig4, use_container_width=True)
-
-    ### **Citi Bike Trips Daily**
-    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
-    df['month'] = df['date'].dt.month
-    df['month'] = df['month'].astype('int')
-    df['season'] = [
-    "winter" if (month == 12 or month in [1, 2, 3, 4])
-    else "spring" if month in [5]
-    else "summer" if month in [6, 7, 8, 9]
-    else "fall"
-    for month in df['month']
-]
-    df['value'] = 1
-    df_groupby_bar = df.groupby('start_station_name', as_index=False).agg({'value': 'sum'})
-    top_20 = df_groupby_bar.nlargest(20, 'value')
-    fig = go.Figure(go.Bar(x = top_20['start_station_name'], y = top_20['value'], marker = {'color': top_20['value'],'colorscale': 'Blues'}))
-    st.plotly_chart(fig, use_container_width=True)
 
 
     ### Tableau - CitiBike Usage by Months ######
@@ -160,8 +161,21 @@ elif page == "Interactive Map":
             st.components.v1.html(html_content, height=600)
     else:
         st.error(f"Error: HTML file not found at {html_file_path}")
+elif page == "Interactive Map":
+    st.title("Interactive Bike Trip Map")
 
-   
+##time of day heat Map
+uploaded_file = st.file_uploader("heatmap_image", type=["png", "jpg", "jpeg"])
+
+if uploaded_file is not None:
+    # Open the uploaded image
+    image = Image.open(uploaded_file)
+    
+    # Display the image
+    st.image(image, caption="Uploaded Heat Map", use_column_width=True)
+
+
+    
 ### Recommendations
 
 if page == "Recommendations":
