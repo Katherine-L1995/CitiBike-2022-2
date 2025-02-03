@@ -164,15 +164,20 @@ elif page == "Interactive Map":
 elif page == "Interactive Map":
     st.title("Interactive Bike Trip Map")
 
-##time of day heat Map
-uploaded_file = st.file_uploader("heatmap_image", type=["png", "jpg", "jpeg"])
+    ##time of day heat Map
+    png_file_path = r"heatmap_image.png"
+# Ensure the file exists before trying to read it
+    if os.path.exists(png_file_path):
+        with open(png_file_path, "r", encoding="utf-8") as f:
+            png_content = f.read()
+            # Display the HTML content using Streamlit's HTML component
+            st.components.v1.png(png_content, height=600)
+    else:
+        st.error(f"Error: PNG file not found at {png_file_path}")
 
-if uploaded_file is not None:
-    # Open the uploaded image
-    image = Image.open(uploaded_file)
-    
-    # Display the image
-    st.image(image, caption="Uploaded Heat Map", use_column_width=True)
+elif page == "Interactive Map":
+    st.title("Heat Map")
+
 
 
     
