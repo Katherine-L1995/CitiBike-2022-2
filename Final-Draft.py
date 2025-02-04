@@ -7,6 +7,7 @@ import json
 import pandas as pd
 from keplergl import KeplerGl
 import os
+import matplotlib.pyplot as plt
 
 # Sidebar navigation for selecting different analysis sections
 page = st.sidebar.selectbox('Select an aspect of the analysis',
@@ -164,63 +165,100 @@ elif page == "Interactive Map":
 elif page == "Interactive Map":
     st.title("Interactive Bike Trip Map")
 
-    ##time of day heat Map
-    png_file_path = r"heatmap_image.png"
-# Ensure the file exists before trying to read it
-    if os.path.exists(png_file_path):
-        with open(png_file_path, "r", encoding="utf-8") as f:
-            png_content = f.read()
-            # Display the HTML content using Streamlit's HTML component
-            st.components.v1.png(png_content, height=600)
-    else:
-        st.error(f"Error: PNG file not found at {png_file_path}")
-
-elif page == "Interactive Map":
-    st.title("Heat Map")
+## Time of Day Heat Map
 
 
+# Title
+st.title("Heatmap: Citibike Rider Activity")
 
-    
+# Display Interactive Map (Example Placeholder)
+st.subheader("Interactive Map Section")
+
+# Image path
+image_path = r"C:\Users\Kathe\CitiBike-2022-2\Screenshot.jpg"
+
+# Display the image in the map section
+st.image(image_path, caption="Heatmap: Citibike Rider Activity", use_column_width=True)
+
+
+
+
 ### Recommendations
 
 if page == "Recommendations":
     st.title("2022 CitiBike Insights")
 
-    st.header("Ridership Trends")
-    st.markdown("""
-    - Ridership peaks during the warmer months, with the highest usage in summer through early fall.  
-    - **Classic bikes** are preferred over electric bikes, likely due to lower cost, easier maintenance, and wider availability.  
-    - **Electric bikes**, however, maintain steadier ridership year-round, suggesting they are more commonly used for commuting rather than leisure.
-    """)
 
-    st.header("Popular Stations")
+st.markdown("""
+- Ridership peaks during the warmer months, with the highest usage in summer through early fall.  
+- **Classic bikes** are preferred over electric bikes, likely due to lower cost, easier maintenance, and wider availability.  
+- **Electric bikes**, however, maintain steadier ridership year-round, suggesting they are more commonly used for commuting rather than leisure.
+""")
 
-    st.subheader("Columbus Circle & Central Park")
-    st.markdown("""
-    - This area experiences the highest ridership, likely due to its proximity to Central Park, a major attraction for both tourists and locals who prefer cycling in a car-free environment.  
-    - Analyzing ridership on the opposite side of Central Park could provide insights into potential expansion or station redistribution.
-    """)
+st.header("Popular Stations")
 
-    st.subheader("Battery Park & Teardrop Park")
-    st.markdown("""
-    - These locations form a high-ridership cluster, likely due to their scenic routes and safe, open spaces for both leisure riders and commuters.
-    """)
+st.subheader("Columbus Circle & Central Park")
+st.markdown("""
+- This area experiences the highest ridership, likely due to its proximity to Central Park, a major attraction for both tourists and locals who prefer cycling in a car-free environment.  
+- Analyzing ridership on the opposite side of Central Park could provide insights into potential expansion or station redistribution.
+""")
 
-    st.header("Recommendations & Insights")
+st.subheader("Battery Park & Teardrop Park")
+st.markdown("""
+- These locations form a high-ridership cluster, likely due to their scenic routes and safe, open spaces for both leisure riders and commuters.
+""")
 
-    st.subheader("Expand CitiBike Stations in Central Park’s Lesser-Used Areas")
-    st.markdown("""
-    - Investigate demand on the other side of the park to determine if station placement influences usage.
-    """)
+st.header("Recommendations & Insights")
 
-    st.subheader("Enhance Infrastructure for Electric Bike Commuters")
-    st.markdown("""
-    - To further improve accessibility and daily use for commuters who live further away from Manhattan, more charging stations could be added in commuter-heavy areas, such as near subway stations.  
-    - Increasing the availability of e-bikes in these areas could also improve year-round ridership, leading to higher subscriptions and overall growth in the New York Metro Area.
-    """)
+st.subheader("Expand CitiBike Stations in Central Park’s Lesser-Used Areas")
+st.markdown("""
+- Investigate demand on the other side of the park to determine if station placement influences usage.
+""")
 
-    st.subheader("Encourage Leisure Riding in Scenic Areas")
-    st.markdown("""
-    - Given the popularity of Battery Park and Teardrop Park, CitiBike could promote designated cycling routes through these areas to attract more riders.  
-    - Additionally, launching CitiBike tours in these scenic locations—where customers can rent and reserve bikes in advance—would enhance brand visibility and organically increase ridership.
-    """)
+st.subheader("Enhance Infrastructure for Electric Bike Commuters")
+st.markdown("""
+- To further improve accessibility and daily use for commuters who live further away from Manhattan, more charging stations could be added in commuter-heavy areas, such as near subway stations.  
+- Increasing the availability of e-bikes in these areas could also improve year-round ridership, leading to higher subscriptions and overall growth in the New York Metro Area.
+""")
+
+st.subheader("Encourage Leisure Riding in Scenic Areas")
+st.markdown("""
+- Given the popularity of Battery Park and Teardrop Park, CitiBike could promote designated cycling routes through these areas to attract more riders.  
+- Additionally, launching CitiBike tours in these scenic locations—where customers can rent and reserve bikes in advance—would enhance brand visibility and organically increase ridership.
+""")
+
+st.header("Challenges & Potential Solutions")
+
+st.subheader("Potential Bottlenecks in Bike Distribution")
+st.markdown("""
+- **Issue:** Popular stations experience frequent shortages, while lower-usage stations may have idle bikes.  
+- **Solution:** Implement a dynamic bike redistribution strategy to optimize availability at high-demand locations.
+""")
+
+st.subheader("Seasonal Adjustments")
+st.markdown("""
+- **Issue:** Ridership declines in colder months, especially for classic bikes.  
+- **Solution:** Scale back classic bike availability while maintaining strong e-bike access near commuter-heavy stations.
+""")
+
+st.header("Improving CitiBike Distribution in NYC")
+
+st.subheader("Expanding CitiBike Stations in Boroughs Outside of Manhattan")
+st.markdown("""
+- Increasing CitiBike availability in Brooklyn and Queens could improve commuting options into Manhattan.  
+- **Opportunity:** Partner with apartment complexes to offer electric bikes for tenants, providing a low-cost rental program as an alternative to public transit.  
+- **Advantage:** Indoor storage solutions for bikes during winter months, along with dedicated charging stations, would improve accessibility.
+""")
+
+st.subheader("Incentivizing Balanced Bike Distribution")
+st.markdown("""
+- Since bike availability is unequal at pickup and drop-off locations, CitiBike could introduce:  
+  - A **points-based rewards system** or **discounted rides** for users who drop off bikes at underutilized stations.  
+  - **Real-time traffic comparisons** in the CitiBike app to encourage biking over rideshare options like Uber.
+""")
+
+st.subheader("Setting Up Temporary CitiBike Stations in High-Demand Areas")
+st.markdown("""
+- **Solution:** Deploy temporary docking stations during peak hours and weekends to alleviate shortages at certain locations.  
+- **Benefit:** Allows CitiBike’s analytics team to measure demand and optimize station placement dynamically.
+""")
