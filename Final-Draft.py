@@ -175,7 +175,7 @@ st.title("Heatmap: Citibike Rider Activity")
 st.subheader("Interactive Map Section")
 
 # Image path
-image_path = r"C:\Users\Kathe\CitiBike-2022-2\Screenshot.jpg"
+image_path = r"Screenshot.jpg"
 
 # Display the image in the map section
 st.image(image_path, caption="Heatmap: Citibike Rider Activity", use_column_width=True)
